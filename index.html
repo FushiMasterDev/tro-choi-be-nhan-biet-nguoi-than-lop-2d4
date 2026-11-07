@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bé Nhận Biết Người Thân</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="card">
+  <section id="start">
+    <div class="fruit" aria-hidden="true" style="font-size:64px;margin-bottom:8px">👴👵👨👩</div>
+    <h1><span>Bé</span> <span>Nhận</span> <span>Biết</span> <span>Người Thân</span></h1>
+    <p>10 câu hỏi — nghe cô hỏi rồi chọn đúng người thân nhé</p>
+    <button class="btn" id="startBtn">Bắt đầu</button>
+  </section>
+
+  <section id="quiz" hidden>
+    <div class="top">
+      <span id="count">Câu 1/10</span>
+      <button class="replay" id="replayBtn" aria-label="Nghe lại câu hỏi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+        Nghe lại
+      </button>
+      <span id="points">⭐ 0</span>
+    </div>
+    <div class="bar" aria-hidden="true"><div id="progress"></div></div>
+    <div class="question" id="qText"></div>
+    <div class="fruit" id="show" aria-hidden="true" hidden></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </section>
+
+  <section id="result" hidden>
+    <h1><span>Giỏi</span> <span>quá</span><span>!</span></h1>
+    <div class="score" id="finalScore"></div>
+    <div class="stars" id="stars" aria-hidden="true"></div>
+    <p id="resultMsg"></p>
+    <button class="btn" id="againBtn">Chơi lại</button>
+  </section>
+</main>
+
+<script>
+// shortcut: pictures are emoji (look differs slightly per device); swap for SVG/PNG if exact art matters.
+const FAMILY = { "Ông": ["👴", "ông"], "Bà": ["👵", "bà"], "Bố": ["👨", "bố"], "Mẹ": ["👩", "mẹ"], "Anh trai": ["👦", "anh trai"], "Chị gái": ["👧", "chị gái"], "Em bé": ["👶", "em bé"], "Bố mẹ": ["👨👩", "bố mẹ"], "Ông bà": ["👴👵", "ông bà"], "Cả nhà": ["👨‍👩‍👧‍👦", "cả nhà"] };
+
+window.GAME = {
+  known: FAMILY, audioDir: "audio", readOptions: false, pics: true,
+  option(b, name) {
+    const e = FAMILY[name][0];
+    // several emoji in one picture (e.g. bố mẹ) are shrunk to fit the square button
+    if ([...new Intl.Segmenter().segment(e)].length > 1) b.innerHTML = `<span class="duo">${e}</span>`; else b.textContent = e;
+    b.setAttribute("aria-label", FAMILY[name][1]);
+  },
+  wrongText: q => `Chưa đúng rồi, đây mới là ${FAMILY[q.answer][1]}${q.answer === "Cả nhà" ? "" : " của bé"} nè!`,
+  questions: [
+    { answer: "Ông", q: "Ông của bé đâu?", options: ["Bà", "Ông", "Em bé"] },
+    { answer: "Bà", q: "Bà của bé đâu?", options: ["Bà", "Mẹ", "Bố"] },
+    { answer: "Bố", q: "Bố của bé đâu?", options: ["Anh trai", "Ông", "Bố"] },
+    { answer: "Mẹ", q: "Mẹ của bé đâu?", options: ["Mẹ", "Chị gái", "Ông"] },
+    { answer: "Anh trai", q: "Anh trai của bé đâu?", options: ["Bố", "Anh trai", "Em bé"] },
+    { answer: "Chị gái", q: "Chị gái của bé đâu?", options: ["Bà", "Em bé", "Chị gái"] },
+    { answer: "Em bé", q: "Em của bé đâu?", options: ["Em bé", "Anh trai", "Mẹ"] },
+    { answer: "Bố mẹ", q: "Bố mẹ của bé đâu?", options: ["Ông bà", "Bố mẹ", "Chị gái"] },
+    { answer: "Ông bà", q: "Ông bà của bé đâu?", options: ["Bố mẹ", "Em bé", "Ông bà"] },
+    { answer: "Cả nhà", q: "Cả nhà mình đâu?", options: ["Cả nhà", "Ông bà", "Em bé"] },
+  ],
+};
+</script>
+<script src="quiz.js"></script>
+</body>
+</html>
